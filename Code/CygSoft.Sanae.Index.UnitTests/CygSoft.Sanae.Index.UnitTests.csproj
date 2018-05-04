@@ -87,10 +87,6 @@
       <Project>{a75e419a-7df9-466e-8f5a-351310672ce6}</Project>
       <Name>CygSoft.Sanae.Index</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CygSoft.Sanae.Infrastructure\CygSoft.CodeCat.Infrastructure.csproj">
-      <Project>{8c992a57-bcbf-4b78-9f69-c88a30e39963}</Project>
-      <Name>CygSoft.CodeCat.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

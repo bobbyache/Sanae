@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CygSoft.Sanae.Infrastructure
+namespace CygSoft.Sanae.Index.Infrastructure
 {
-    public interface ITitledEntity
+    public interface ISimpleIndexItem
     {
         string Id { get; }
         string Title { get; set; }

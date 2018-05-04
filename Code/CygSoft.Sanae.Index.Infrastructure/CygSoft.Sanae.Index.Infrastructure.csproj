@@ -46,14 +46,9 @@
     <Compile Include="IKeywordSearchIndex.cs" />
     <Compile Include="IKeywordSearchIndexRepository.cs" />
     <Compile Include="IKeywordTarget.cs" />
+    <Compile Include="ISimpleIndexItem.cs" />
     <Compile Include="PersistableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CygSoft.Sanae.Infrastructure\CygSoft.CodeCat.Infrastructure.csproj">
-      <Project>{8c992a57-bcbf-4b78-9f69-c88a30e39963}</Project>
-      <Name>CygSoft.CodeCat.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

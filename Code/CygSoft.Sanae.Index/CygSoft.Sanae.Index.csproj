@@ -57,10 +57,6 @@
       <Project>{9d7e248a-e4ef-42de-a624-9f18d827ba42}</Project>
       <Name>CygSoft.Sanae.Index.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CygSoft.Sanae.Infrastructure\CygSoft.CodeCat.Infrastructure.csproj">
-      <Project>{8c992a57-bcbf-4b78-9f69-c88a30e39963}</Project>
-      <Name>CygSoft.CodeCat.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

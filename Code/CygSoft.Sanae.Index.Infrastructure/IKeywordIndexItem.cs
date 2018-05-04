@@ -1,13 +1,8 @@
-﻿using CygSoft.Sanae.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace CygSoft.Sanae.Index.Infrastructure
 {
-    public interface IKeywordIndexItem : ITitledEntity
+    public interface IKeywordIndexItem : ISimpleIndexItem
     {
         string FileTitle { get; }
         string[] Keywords { get; }
