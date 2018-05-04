@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: InternalsVisibleTo("Domain.UnitTests")]
 [assembly: InternalsVisibleTo("CygSoft.Sanae.Index.UnitTests")]
 
 // General Information about an assembly is controlled through the following 
@@ -11,11 +10,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CygSoft.Sanae.Index")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CygSoft")]
-[assembly: AssemblyProduct("CygSoft.Sanae.Index")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -25,15 +19,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("6c7147c2-7ed3-4c74-be21-ef9fe631741a")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.2.*")]
 
