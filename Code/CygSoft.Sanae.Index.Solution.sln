@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CygSoft.Sanae.Index", "CygSoft.Sanae.Index\CygSoft.Sanae.Index.csproj", "{A75E419A-7DF9-466E-8F5A-351310672CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CygSoft.Sanae.Index.Infrastructure", "CygSoft.Sanae.Index.Infrastructure\CygSoft.Sanae.Index.Infrastructure.csproj", "{9D7E248A-E4EF-42DE-A624-9F18D827BA42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CygSoft.CodeCat.Infrastructure", "CygSoft.Sanae.Infrastructure\CygSoft.CodeCat.Infrastructure.csproj", "{8C992A57-BCBF-4B78-9F69-C88A30E39963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CygSoft.Sanae.Index.UnitTests", "CygSoft.Sanae.Index.UnitTests\CygSoft.Sanae.Index.UnitTests.csproj", "{3958E564-C368-4CAE-B531-024023174D15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A75E419A-7DF9-466E-8F5A-351310672CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75E419A-7DF9-466E-8F5A-351310672CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75E419A-7DF9-466E-8F5A-351310672CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75E419A-7DF9-466E-8F5A-351310672CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D7E248A-E4EF-42DE-A624-9F18D827BA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D7E248A-E4EF-42DE-A624-9F18D827BA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D7E248A-E4EF-42DE-A624-9F18D827BA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D7E248A-E4EF-42DE-A624-9F18D827BA42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C992A57-BCBF-4B78-9F69-C88A30E39963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C992A57-BCBF-4B78-9F69-C88A30E39963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C992A57-BCBF-4B78-9F69-C88A30E39963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C992A57-BCBF-4B78-9F69-C88A30E39963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3958E564-C368-4CAE-B531-024023174D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3958E564-C368-4CAE-B531-024023174D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3958E564-C368-4CAE-B531-024023174D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3958E564-C368-4CAE-B531-024023174D15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
