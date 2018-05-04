@@ -47,7 +47,6 @@
     <Compile Include="IKeywordSearchIndexRepository.cs" />
     <Compile Include="IKeywordTarget.cs" />
     <Compile Include="ISimpleIndexItem.cs" />
-    <Compile Include="PersistableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
