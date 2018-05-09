@@ -1,5 +1,6 @@
 ﻿using CygSoft.Sanae.Index.Infrastructure;
 using System;
+using System.Collections.Generic;
 
 namespace CygSoft.Sanae.Index
 {
@@ -53,6 +54,7 @@ namespace CygSoft.Sanae.Index
         }
 
         private KeyPhrases keyPhrases;
+        private List<string> categoryPaths = new List<string>();
 
         public string FileTitle { get { return this.Id + ".xml"; } }
 
@@ -72,6 +74,8 @@ namespace CygSoft.Sanae.Index
             get { return title; }
             set { title = value; this.DateModified = DateTime.Now; }
         }
+
+        public string[] CategoryPaths => categoryPaths.ToArray();
 
         public void SetKeywords(string commaDelimitedKeywords)
         {
@@ -109,6 +113,17 @@ namespace CygSoft.Sanae.Index
         protected void KeywordsFromDelimitedList(string commaDelimitedKeywords)
         {
             this.keyPhrases = new KeyPhrases(commaDelimitedKeywords);
+        }
+
+        public void AddCategoryPath(string path)
+        {
+            if (!categoryPaths.Exists(p => p == path))
+                categoryPaths.Add(path);
+        }
+
+        public void RemoveCategoryPath(string path)
+        {
+            categoryPaths.Remove(path);
         }
     }
 }

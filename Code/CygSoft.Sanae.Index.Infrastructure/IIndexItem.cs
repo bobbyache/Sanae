@@ -9,9 +9,13 @@ namespace CygSoft.Sanae.Index.Infrastructure
 
         string FileTitle { get; }
         string[] Keywords { get; }
+        string[] CategoryPaths { get; }
         string CommaDelimitedKeywords { get; }
         DateTime DateModified { get; }
         DateTime DateCreated { get; }
+
+        void AddCategoryPath(string path);
+        void RemoveCategoryPath(string path);
 
         void AddKeywords(string commaDelimitedKeywords);
         bool AllKeywordsFound(string[] keywords);

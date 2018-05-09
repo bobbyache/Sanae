@@ -159,5 +159,49 @@ namespace CygSoft.Sanae.Index.UnitTests
             Guid guid = new Guid(keywordIndexItem.Id);
             Assert.That(guid == Guid.Empty, Is.False);
         }
+
+        [Test]
+        public void IndexItem_AddCategoryPaths_AddsPaths_Successfully()
+        {
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            indexItem.AddCategoryPath("Project/Module/WorkItem1");
+            indexItem.AddCategoryPath("Project/Module/WorkItem2");
+
+            Assert.AreEqual(2, indexItem.CategoryPaths.Length);
+        }
+
+        [Test]
+        public void IndexItem_AddDuplicateCategoryPath_DoesNotDuplicate()
+        {
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            indexItem.AddCategoryPath("Project/Module/WorkItem");
+            indexItem.AddCategoryPath("Project/Module/WorkItem");
+
+            Assert.AreEqual(1, indexItem.CategoryPaths.Length);
+        }
+
+        [Test]
+        public void IndexItem_RemoveCategoryPath_RemovesCategoryPath_Successfully()
+        {
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            indexItem.AddCategoryPath("Project/Module/WorkItem1");
+            indexItem.AddCategoryPath("Project/Module/WorkItem2");
+
+            indexItem.RemoveCategoryPath("Project/Module/WorkItem1");
+
+            Assert.AreEqual(1, indexItem.CategoryPaths.Length);
+            Assert.AreEqual("Project/Module/WorkItem2", indexItem.CategoryPaths[0]);
+        }
+
+        [Test]
+        public void IndexItem_RemoveNonExistentCategoryPath_DoesNothingWithNoException()
+        {
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            indexItem.AddCategoryPath("Project/Module/WorkItem1");
+            indexItem.AddCategoryPath("Project/Module/WorkItem2");
+            indexItem.RemoveCategoryPath("Project/Module/WorkItem3");
+
+            Assert.AreEqual(2, indexItem.CategoryPaths.Length);
+        }
     }
 }
