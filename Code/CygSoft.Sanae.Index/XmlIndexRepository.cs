@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
-    public abstract class XmlKeywordSearchIndexRepository<IndexItem> : IKeywordSearchIndexRepository where IndexItem : XmlKeywordIndexItem, new()
+    public abstract class XmlKeywordSearchIndexRepository<IndexItem> : IIndexRepository where IndexItem : XmlIndexItem, new()
     {
         public string RootElement { get; private set; }
         protected readonly IIndexFileFunctions FileFunctions;
@@ -25,7 +25,7 @@ namespace CygSoft.Sanae.Index
             this.FileFunctions = indexFileFunctions;
         }
 
-        public IKeywordSearchIndex OpenIndex(string filePath, Version expectedVersion)
+        public IIndex OpenIndex(string filePath, Version expectedVersion)
         {
             if (!FileFunctions.Exists(filePath))
                 throw new FileNotFoundException("Index file not found.");
@@ -36,7 +36,7 @@ namespace CygSoft.Sanae.Index
             CheckVersion(fileText, expectedVersion);
 
             List<IndexItem> items = LoadIndexItems(fileText, expectedVersion);
-            IKeywordSearchIndex Index = new KeywordSearchIndex(filePath, expectedVersion, items.Cast<IKeywordIndexItem>().ToList());
+            IIndex Index = new Index(filePath, expectedVersion, items.Cast<IIndexItem>().ToList());
             return Index;
         }
 
@@ -52,7 +52,7 @@ namespace CygSoft.Sanae.Index
                 throw new InvalidFileIndexVersionException("The file version is not compatible with the current application version.");
         }
 
-        public void SaveIndex(IKeywordSearchIndex Index)
+        public void SaveIndex(IIndex Index)
         {
             XDocument xmlDocument = XDocument.Load(Index.FilePath, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
             XElement xElement = xmlDocument.Element(this.RootElement);
@@ -67,24 +67,24 @@ namespace CygSoft.Sanae.Index
             FileFunctions.Save(xmlDocument.ToString(), Index.FilePath);
         }
 
-        public IKeywordSearchIndex SaveIndexAs(IKeywordSearchIndex Index, string filePath)
+        public IIndex SaveIndexAs(IIndex Index, string filePath)
         {
-            IKeywordSearchIndex newIndex = CloneIndex(Index, filePath);
+            IIndex newIndex = CloneIndex(Index, filePath);
             CreateIndex(filePath, Index.CurrentVersion);
             SaveIndex(newIndex);
             return newIndex;
         }
 
-        public IKeywordSearchIndex CloneIndex(IKeywordSearchIndex sourceIndex, string filePath)
+        public IIndex CloneIndex(IIndex sourceIndex, string filePath)
         {
-            IKeywordSearchIndex newIndex = new KeywordSearchIndex(filePath, sourceIndex.CurrentVersion, sourceIndex.All().ToList());
+            IIndex newIndex = new Index(filePath, sourceIndex.CurrentVersion, sourceIndex.All().ToList());
             return newIndex;
         }
 
-        public IKeywordSearchIndex CreateIndex(string filePath, Version expectedVersion)
+        public IIndex CreateIndex(string filePath, Version expectedVersion)
         {
             CreateNew(filePath, expectedVersion);
-            IKeywordSearchIndex Index = new KeywordSearchIndex(filePath, expectedVersion);
+            IIndex Index = new Index(filePath, expectedVersion);
             return Index;
         }
 
@@ -105,7 +105,7 @@ namespace CygSoft.Sanae.Index
 
         protected abstract List<IndexItem> LoadIndexItems(string fileText, Version expectedVersion);
         
-        public void ImportItems(string filePath, Version expectedVersion, IKeywordIndexItem[] importItems)
+        public void ImportItems(string filePath, Version expectedVersion, IIndexItem[] importItems)
         {
             IndexItem[] imports = importItems.OfType<IndexItem>().ToArray();
             XDocument xDocument = XDocument.Load(filePath);

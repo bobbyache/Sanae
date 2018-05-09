@@ -2,8 +2,11 @@
 
 namespace CygSoft.Sanae.Index.Infrastructure
 {
-    public interface IKeywordIndexItem : ISimpleIndexItem
+    public interface IIndexItem
     {
+        string Id { get; }
+        string Title { get; set; }
+
         string FileTitle { get; }
         string[] Keywords { get; }
         string CommaDelimitedKeywords { get; }

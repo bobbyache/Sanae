@@ -9,7 +9,7 @@ namespace CygSoft.Sanae.Index.UnitTests.Helpers
     /// <summary>
     /// Required for testing. KeywordIndexItem is abstract.
     /// </summary>
-    public class TestKeywordIndexItem : KeywordIndexItem
+    public class TestKeywordIndexItem : IndexItem
     {
         public TestKeywordIndexItem() : base()
         {

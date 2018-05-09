@@ -6,7 +6,7 @@ namespace CygSoft.Sanae.Index
     /// <summary>
     /// A single code index item that points to a single code snippet resource.
     /// </summary>
-    public abstract class KeywordIndexItem : IKeywordIndexItem
+    public abstract class IndexItem : IIndexItem
     {
         private Guid identifyingGuid;
 
@@ -27,7 +27,7 @@ namespace CygSoft.Sanae.Index
             }
         }
 
-        public KeywordIndexItem()
+        public IndexItem()
         {
             this.title = string.Empty;
             this.KeywordsFromDelimitedList(string.Empty);
@@ -36,7 +36,7 @@ namespace CygSoft.Sanae.Index
             this.DateModified = this.DateCreated;
         }
 
-        public KeywordIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
+        public IndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
         {
             this.DateCreated = dateCreated;
             this.DateModified = dateModified;
@@ -45,7 +45,7 @@ namespace CygSoft.Sanae.Index
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
         }
 
-        public KeywordIndexItem(string title, string commaDelimitedKeywords)
+        public IndexItem(string title, string commaDelimitedKeywords)
             : base()
         {
             this.title = title;

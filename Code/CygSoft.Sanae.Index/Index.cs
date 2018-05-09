@@ -9,7 +9,7 @@ namespace CygSoft.Sanae.Index
     /// <summary>
     /// A lookup of index items that point to code files.
     /// </summary>
-    public class KeywordSearchIndex : IKeywordSearchIndex
+    public class Index : IIndex
     {
         /// <summary>
         /// When the code index has been modified in any way, this event will fire which will
@@ -17,7 +17,7 @@ namespace CygSoft.Sanae.Index
         /// </summary>
         public event EventHandler IndexModified;
 
-        private List<IKeywordIndexItem> IndexItems;
+        private List<IIndexItem> IndexItems;
         private KeyPhrases keyPhrases = new KeyPhrases();
 
         public bool FindAllForEmptySearch { get; set; }
@@ -26,7 +26,7 @@ namespace CygSoft.Sanae.Index
 
         public string LibraryFolderPath { get; private set; }
 
-        internal KeywordSearchIndex(string filePath, Version currentVersion, List<IKeywordIndexItem> IndexItems)
+        internal Index(string filePath, Version currentVersion, List<IIndexItem> IndexItems)
         {
             this.FilePath = filePath;
 
@@ -36,14 +36,14 @@ namespace CygSoft.Sanae.Index
             CreateKeywordIndex();
         }
 
-        internal KeywordSearchIndex(string filePath, Version currentVersion)
+        internal Index(string filePath, Version currentVersion)
         {
             this.FilePath = filePath;
             this.CurrentVersion = currentVersion;
-            this.IndexItems = new List<IKeywordIndexItem>();
+            this.IndexItems = new List<IIndexItem>();
         }
 
-        public IKeywordIndexItem[] All()
+        public IIndexItem[] All()
         {
             return IndexItems.ToArray();
         }
@@ -54,7 +54,7 @@ namespace CygSoft.Sanae.Index
 
         public string[] Keywords { get { return this.keyPhrases.Phrases; } }
 
-        public IKeywordIndexItem[] FindByIds(string[] ids)
+        public IIndexItem[] FindByIds(string[] ids)
         {
             var result = from ix in IndexItems
                          join ia in ids on ix.Id equals ia
@@ -63,23 +63,23 @@ namespace CygSoft.Sanae.Index
             return result.ToArray();
         }
 
-        public IKeywordIndexItem FindById(string id)
+        public IIndexItem FindById(string id)
         {
             if (this.IndexItems.Any(r => r.Id == id))
                 return this.IndexItems.Where(r => r.Id == id).SingleOrDefault();
             return null;
         }
 
-        public IKeywordIndexItem[] Find(string commaDelimitedKeywords)
+        public IIndexItem[] Find(string commaDelimitedKeywords)
         {
-            List<IKeywordIndexItem> foundItemList = new List<IKeywordIndexItem>();
+            List<IIndexItem> foundItemList = new List<IIndexItem>();
 
             if (!string.IsNullOrWhiteSpace(commaDelimitedKeywords))
             {
 
                 KeyPhrases keys = new KeyPhrases(commaDelimitedKeywords);
 
-                foreach (IKeywordIndexItem item in IndexItems)
+                foreach (IIndexItem item in IndexItems)
                 {
                     if (item.AllKeywordsFound(keys.Phrases))
                         foundItemList.Add(item);
@@ -97,7 +97,7 @@ namespace CygSoft.Sanae.Index
 
         public int ItemCount { get { return this.IndexItems.Count; } }
 
-        public bool Contains(IKeywordIndexItem item)
+        public bool Contains(IIndexItem item)
         {
             return this.IndexItems.Any(r => r.Id == item.Id);
         }
@@ -111,7 +111,7 @@ namespace CygSoft.Sanae.Index
         /// A single item has been  changed. This will be used when a code index items is added.
         /// </summary>
         /// <param name="item"></param>
-        public void Update(IKeywordIndexItem item)
+        public void Update(IIndexItem item)
         {
             if (!Contains(item))
                 Add(item);
@@ -121,49 +121,49 @@ namespace CygSoft.Sanae.Index
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public string[] AllKeywords(IKeywordIndexItem[] indeces)
+        public string[] AllKeywords(IIndexItem[] indeces)
         {
             KeyPhrases phrases = new KeyPhrases();
-            foreach (IKeywordIndexItem index in indeces)
+            foreach (IIndexItem index in indeces)
             {
                 phrases.AddKeyPhrases(index.Keywords);
             }
             return phrases.Phrases;
         }
 
-        public string CopyAllKeywords(IKeywordIndexItem[] indeces)
+        public string CopyAllKeywords(IIndexItem[] indeces)
         {
             KeyPhrases phrases = new KeyPhrases();
-            foreach (IKeywordIndexItem index in indeces)
+            foreach (IIndexItem index in indeces)
             {
                 phrases.AddKeyPhrases(index.Keywords);
             }
             return phrases.DelimitKeyPhraseList();
         }
 
-        public void AddKeywords(IKeywordIndexItem[] indeces, string delimitedKeywordList)
+        public void AddKeywords(IIndexItem[] indeces, string delimitedKeywordList)
         {
-            foreach (IKeywordIndexItem index in indeces)
+            foreach (IIndexItem index in indeces)
             {
                 index.AddKeywords(delimitedKeywordList);
             }
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public void RemoveKeywords(IKeywordIndexItem[] indeces, string[] keywords)
+        public void RemoveKeywords(IIndexItem[] indeces, string[] keywords)
         {
             // the rule is that a searchable item cannot have an empty keyword list!
 
-            foreach (IKeywordIndexItem index in indeces)
+            foreach (IIndexItem index in indeces)
             {
                 index.RemoveKeywords(keywords);
             }
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public bool IndexesExistFor(IKeywordIndexItem[] indeces, out IKeywordIndexItem[] existingIndeces)
+        public bool IndexesExistFor(IIndexItem[] indeces, out IIndexItem[] existingIndeces)
         {
-            IEnumerable<IKeywordIndexItem> foundItems = indeces.Join(this.IndexItems, a => a.Id, b => b.Id, 
+            IEnumerable<IIndexItem> foundItems = indeces.Join(this.IndexItems, a => a.Id, b => b.Id, 
                 (a, b) => b);
 
             existingIndeces = foundItems.ToArray();
@@ -171,12 +171,12 @@ namespace CygSoft.Sanae.Index
             return existingIndeces.Count() > 0;
         }
 
-        public bool ValidateRemoveKeywords(IKeywordIndexItem[] indeces, string[] keywords, out IKeywordIndexItem[] invalidIndeces)
+        public bool ValidateRemoveKeywords(IIndexItem[] indeces, string[] keywords, out IIndexItem[] invalidIndeces)
         {
             bool valid = true;
 
-            List<IKeywordIndexItem> invalidItems = new List<IKeywordIndexItem>();
-            foreach (IKeywordIndexItem index in indeces)
+            List<IIndexItem> invalidItems = new List<IIndexItem>();
+            foreach (IIndexItem index in indeces)
             {
                 bool validated = index.ValidateRemoveKeywords(keywords);
                 if (!validated)
@@ -190,7 +190,7 @@ namespace CygSoft.Sanae.Index
             return valid;
         }
 
-        private void Add(IKeywordIndexItem item)
+        private void Add(IIndexItem item)
         {
             if (Contains(item))
                 throw new ApplicationException("This id already exists within the index. Cannot add a duplicate id to the index.");
@@ -202,7 +202,7 @@ namespace CygSoft.Sanae.Index
 
         public void Remove(string id)
         {
-            IKeywordIndexItem item = this.IndexItems.Where(cd => cd.Id == id).SingleOrDefault();
+            IIndexItem item = this.IndexItems.Where(cd => cd.Id == id).SingleOrDefault();
             this.IndexItems.Remove(item);
             CreateKeywordIndex();
 
@@ -212,7 +212,7 @@ namespace CygSoft.Sanae.Index
         private void CreateKeywordIndex()
         {
             keyPhrases = new KeyPhrases();
-            foreach (IKeywordIndexItem IndexItem in IndexItems)
+            foreach (IIndexItem IndexItem in IndexItems)
             {
                 keyPhrases.AddKeyPhrases(IndexItem.Keywords);
             }

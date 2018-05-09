@@ -7,19 +7,19 @@ using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
-    public abstract class XmlKeywordIndexItem : KeywordIndexItem
+    public abstract class XmlIndexItem : IndexItem
     {
 
-        public XmlKeywordIndexItem() : base()
+        public XmlIndexItem() : base()
         {
         }
 
-        public XmlKeywordIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
+        public XmlIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
             : base(id, title, dateCreated, dateModified, commaDelimitedKeywords)
         {
         }
 
-        public XmlKeywordIndexItem(string title, string syntax, string commaDelimitedKeywords)
+        public XmlIndexItem(string title, string syntax, string commaDelimitedKeywords)
             : base(title, commaDelimitedKeywords)
         {
         }

@@ -24,7 +24,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_Create()
         {
-            IKeywordSearchIndex searchIndex = new KeywordSearchIndex(@"C:\keywords\keyword_index.xml", new Version(2,0));
+            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", new Version(2,0));
 
             Assert.AreEqual(searchIndex.CurrentVersion.ToString(), new Version(2, 0).ToString());
             Assert.AreEqual(searchIndex.FilePath, @"C:\keywords\keyword_index.xml");
@@ -34,9 +34,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AddKeywords_SetsDateModified()
         {
-            IKeywordSearchIndex searchIndex = new KeywordSearchIndex(@"C:\keywords\keyword_index.xml", new Version(2, 0));
+            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", new Version(2, 0));
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            searchIndex.AddKeywords(new IKeywordIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
+            searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
         }
 
@@ -44,9 +44,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_WhenAddingKeywordsToIndexItems_ReturnsTrueOnSubsequentSearchForOneOfThoseKeywords()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            IKeywordSearchIndex searchIndex = new KeywordSearchIndex("", new Version(2, 0), new List<IKeywordIndexItem> { keywordSearchIndexItem });
-            searchIndex.AddKeywords(new IKeywordIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
-            IKeywordIndexItem[] items = searchIndex.Find("TEST");
+            IIndex searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
+            IIndexItem[] items = searchIndex.Find("TEST");
 
             Assert.IsNotNull(items, "A single item should be found.");
             Assert.IsTrue(items.Length == 1);
@@ -56,10 +56,10 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterRemovingKeywordsFromIndexItems_ReturnsFalseOnSubsequentSearchForThoseKeywords()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            var searchIndex = new KeywordSearchIndex("", new Version(2, 0), new List<IKeywordIndexItem> { keywordSearchIndexItem });
-            searchIndex.AddKeywords(new IKeywordIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
+            var searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
-            searchIndex.RemoveKeywords(new IKeywordIndexItem[] { keywordSearchIndexItem }, new string[] { "test", "testing", "tested" });
+            searchIndex.RemoveKeywords(new IIndexItem[] { keywordSearchIndexItem }, new string[] { "test", "testing", "tested" });
             var items = searchIndex.Find("TEST");
 
             Assert.IsNotNull(items, "A single item should be found.");
@@ -70,8 +70,8 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterAddingKeywordIndeces_ContainsIndeces()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            var searchIndex = new KeywordSearchIndex("", new Version(2, 0), new List<IKeywordIndexItem> { keywordSearchIndexItem });
-            searchIndex.AddKeywords(new IKeywordIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
+            var searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
             Assert.That(searchIndex.Contains(keywordSearchIndexItem), Is.True);
             Assert.That(searchIndex.Contains(keywordSearchIndexItem.Id), Is.True);
@@ -80,13 +80,13 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AfterAddingItems_AllReturnsIndexItemCount()
         {
-            List<IKeywordIndexItem> indexItems = (new List<TestKeywordIndexItem> {
+            List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
                 new TestKeywordIndexItem("Title 1", "test,testing,tested"),
                 new TestKeywordIndexItem("Title 2", "red,black"),
                 new TestKeywordIndexItem("Title 3", "apple,pear")
-            }).OfType<IKeywordIndexItem>().ToList();
+            }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new KeywordSearchIndex("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", new Version(2, 0), indexItems);
 
             int numItemsInIndex = searchIndex.All().Length;
 
@@ -96,13 +96,13 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AfterAddingItems_AllKeywordsReturnsUniqueKeywords()
         {
-            List<IKeywordIndexItem> indexItems = (new List<TestKeywordIndexItem> {
+            List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
                 new TestKeywordIndexItem("Title 1", "test,testing,tested"),
                 new TestKeywordIndexItem("Title 2", "test,testing"),
                 new TestKeywordIndexItem("Title 3", "TESTING,TESTED")
-            }).OfType<IKeywordIndexItem>().ToList();
+            }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new KeywordSearchIndex("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", new Version(2, 0), indexItems);
 
             string[] allKeywords = searchIndex.AllKeywords(searchIndex.All());
 
@@ -112,15 +112,15 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_FindById_ReturnsCorrectItems()
         {
-            List<IKeywordIndexItem> indexItems = (new List<TestKeywordIndexItem> {
+            List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
                 new TestKeywordIndexItem("2e77c1b2-7155-42ae-b542-e4e582318ff7", "Title 1", DateTime.Now, DateTime.Now, "one,test,testing,tested"),
                 new TestKeywordIndexItem("a995db89-5c04-422e-a9ac-9306e148a51d", "Title 2", DateTime.Now, DateTime.Now, "two,test,testing,tested"),
                 new TestKeywordIndexItem("d38db764-b52a-434b-b880-79df7c640ae3", "Title 3", DateTime.Now, DateTime.Now, "three,test,testing,tested")
-            }).OfType<IKeywordIndexItem>().ToList();
+            }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new KeywordSearchIndex("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", new Version(2, 0), indexItems);
 
-            IKeywordIndexItem[] items = searchIndex.FindByIds(new string[] { "2e77c1b2-7155-42ae-b542-e4e582318ff7", "d38db764-b52a-434b-b880-79df7c640ae3" });
+            IIndexItem[] items = searchIndex.FindByIds(new string[] { "2e77c1b2-7155-42ae-b542-e4e582318ff7", "d38db764-b52a-434b-b880-79df7c640ae3" });
 
             Assert.AreEqual(2, items.Length);
             Assert.IsTrue(items.Any(i => i.Id == "2e77c1b2-7155-42ae-b542-e4e582318ff7"));

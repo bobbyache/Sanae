@@ -42,11 +42,9 @@
     <Compile Include="..\_CommonAssemblyInfo.cs">
       <Link>_CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IKeywordIndexItem.cs" />
-    <Compile Include="IKeywordSearchIndex.cs" />
-    <Compile Include="IKeywordSearchIndexRepository.cs" />
-    <Compile Include="IKeywordTarget.cs" />
-    <Compile Include="ISimpleIndexItem.cs" />
+    <Compile Include="IIndexItem.cs" />
+    <Compile Include="IIndex.cs" />
+    <Compile Include="IIndexRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

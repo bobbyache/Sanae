@@ -55,21 +55,21 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void XmlIndexRepository_CloneIndex_ClonesCorrectly()
         {
-            var indexItems = new IKeywordIndexItem[]
+            var indexItems = new IIndexItem[]
             {
                 new TestKeywordIndexItem("Item 1", "green,blue"),
                 new TestKeywordIndexItem("Item 1", "green,red"),
                 new TestKeywordIndexItem("Item 1", "yellow,gray")
             };
 
-            var stubKeywordSearchIndex = new Mock<IKeywordSearchIndex>();
+            var stubKeywordSearchIndex = new Mock<IIndex>();
             stubKeywordSearchIndex.Setup(m => m.All()).Returns(indexItems);
             stubKeywordSearchIndex.Setup(m => m.CurrentVersion).Returns(new Version(2, 0));
 
-            var keywordSearchIndex = new KeywordSearchIndex("C:File.xml", new Version(2, 0));
+            var keywordSearchIndex = new Index("C:File.xml", new Version(2, 0));
  
             TestXmlKeywordSearchIndexRepository repository = new TestXmlKeywordSearchIndexRepository("RootElement", new StubIndexFileFunctions());
-            IKeywordSearchIndex newSearchIndex = repository.CloneIndex(stubKeywordSearchIndex.Object, @"C:\hello_world.txt");
+            IIndex newSearchIndex = repository.CloneIndex(stubKeywordSearchIndex.Object, @"C:\hello_world.txt");
 
             Assert.That(newSearchIndex, Is.Not.SameAs(stubKeywordSearchIndex.Object));
             Assert.That(newSearchIndex.ItemCount, Is.EqualTo(3));
@@ -119,7 +119,7 @@ namespace CygSoft.Sanae.Index.UnitTests
             }
         }
 
-        class TestXmlKeywordIndexItem : XmlKeywordIndexItem
+        class TestXmlKeywordIndexItem : XmlIndexItem
         {
             public TestXmlKeywordIndexItem() : base()
             {
