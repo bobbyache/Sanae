@@ -14,6 +14,9 @@ namespace CygSoft.Sanae.Index.Infrastructure
         DateTime DateModified { get; }
         DateTime DateCreated { get; }
 
+        string PluginId { get; }
+        string PluginVersion { get; }
+
         void AddCategoryPath(string path);
         void RemoveCategoryPath(string path);
 

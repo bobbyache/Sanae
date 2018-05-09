@@ -11,10 +11,6 @@ namespace CygSoft.Sanae.Index.UnitTests.Helpers
     /// </summary>
     public class TestKeywordIndexItem : IndexItem
     {
-        public TestKeywordIndexItem() : base()
-        {
-        }
-
         public TestKeywordIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion) : 
             base(title, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
         {

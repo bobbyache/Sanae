@@ -139,7 +139,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_InitializedWithParameterlessConstructor_ReturnsNewIdString()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem();
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("Title", "", new string[0], "", "");
             Guid guid = new Guid(keywordIndexItem.Id);
             Assert.That(guid == Guid.Empty, Is.False);
         }
@@ -202,6 +202,21 @@ namespace CygSoft.Sanae.Index.UnitTests
             indexItem.RemoveCategoryPath("Project/Module/WorkItem3");
 
             Assert.AreEqual(2, indexItem.CategoryPaths.Length);
+        }
+
+        [Test]
+        public void IndexItem_SetsPluginProperties_When_Initialized()
+        {
+            IIndexItem indexItem1 = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
+
+            IIndexItem indexItem2 = new TestKeywordIndexItem("2d4421df-2b88-470f-b9e8-55af9ccb760d", 
+                "Test Title", DateTime.Now, DateTime.Now, "test, testing", new string[0], "Awe34Br", "2.0.0.0");
+
+            Assert.AreEqual("Awe34Dr", indexItem1.PluginId);
+            Assert.AreEqual("1.0.0.0", indexItem1.PluginVersion);
+
+            Assert.AreEqual("Awe34Br", indexItem2.PluginId);
+            Assert.AreEqual("2.0.0.0", indexItem2.PluginVersion);
         }
     }
 }

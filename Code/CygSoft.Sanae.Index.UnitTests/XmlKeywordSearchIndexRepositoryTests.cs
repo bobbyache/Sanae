@@ -126,7 +126,7 @@ namespace CygSoft.Sanae.Index.UnitTests
 
         class TestXmlIndexItem : XmlIndexItem
         {
-            public TestXmlIndexItem() : base()
+            public TestXmlIndexItem() : base("Title", "", "", new string[0], "", "")
             {
             }
 

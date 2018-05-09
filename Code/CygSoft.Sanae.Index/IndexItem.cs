@@ -28,14 +28,14 @@ namespace CygSoft.Sanae.Index
             }
         }
 
-        public IndexItem()
-        {
-            this.title = string.Empty;
-            this.KeywordsFromDelimitedList(string.Empty);
-            this.identifyingGuid = Guid.Empty;
-            this.DateCreated = DateTime.Now;
-            this.DateModified = this.DateCreated;
-        }
+        //public IndexItem()
+        //{
+        //    this.title = string.Empty;
+        //    this.KeywordsFromDelimitedList(string.Empty);
+        //    this.identifyingGuid = Guid.Empty;
+        //    this.DateCreated = DateTime.Now;
+        //    this.DateModified = this.DateCreated;
+        //}
 
         public IndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
         {
@@ -44,6 +44,8 @@ namespace CygSoft.Sanae.Index
             this.identifyingGuid = new Guid(id);
             this.title = title;
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
+            this.PluginId = pluginId;
+            this.PluginVersion = pluginVersion;
         }
 
         public IndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
@@ -51,7 +53,12 @@ namespace CygSoft.Sanae.Index
         {
             this.title = title;
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
+            this.PluginId = pluginId;
+            this.PluginVersion = pluginVersion;
         }
+
+        public string PluginId { get; private set; }
+        public string PluginVersion { get; private set; }
 
         private KeyPhrases keyPhrases;
         private List<string> categoryPaths = new List<string>();

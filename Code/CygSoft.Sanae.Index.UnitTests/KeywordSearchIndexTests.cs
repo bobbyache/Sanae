@@ -35,7 +35,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AddKeywords_SetsDateModified()
         {
             IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", "2.0.0.0");
-            var keywordSearchIndexItem = new TestKeywordIndexItem();
+            var keywordSearchIndexItem = new TestKeywordIndexItem("Title", "", new string[0], "", "");
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
         }
@@ -43,7 +43,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_WhenAddingKeywordsToIndexItems_ReturnsTrueOnSubsequentSearchForOneOfThoseKeywords()
         {
-            var keywordSearchIndexItem = new TestKeywordIndexItem();
+            var keywordSearchIndexItem = new TestKeywordIndexItem("Title", "", new string[0], "", "");
             IIndex searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
             IIndexItem[] items = searchIndex.Find("TEST");
@@ -55,7 +55,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AfterRemovingKeywordsFromIndexItems_ReturnsFalseOnSubsequentSearchForThoseKeywords()
         {
-            var keywordSearchIndexItem = new TestKeywordIndexItem();
+            var keywordSearchIndexItem = new TestKeywordIndexItem("Title", "", new string[0], "", "");
             var searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
@@ -69,7 +69,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AfterAddingKeywordIndeces_ContainsIndeces()
         {
-            var keywordSearchIndexItem = new TestKeywordIndexItem();
+            var keywordSearchIndexItem = new TestKeywordIndexItem("Title", "", new string[0], "", "");
             var searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
