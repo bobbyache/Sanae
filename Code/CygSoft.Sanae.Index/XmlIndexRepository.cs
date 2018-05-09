@@ -8,29 +8,30 @@ using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
-    public abstract class XmlKeywordSearchIndexRepository<IndexItem> : IIndexRepository where IndexItem : XmlIndexItem, new()
+    public abstract class XmlIndexRepository<IndexItem> : IIndexRepository where IndexItem : XmlIndexItem, new()
     {
         public string RootElement { get; private set; }
-        protected readonly IIndexFileFunctions FileFunctions;
+        private Func<string, bool> formatChecker;
+        private Func<string, string, bool> versionChecker;
 
-        public XmlKeywordSearchIndexRepository(string rootElement)
+        public XmlIndexRepository(string rootElement, Func<string, bool> formatChecker, Func<string, string, bool> versionChecker)
         {
             this.RootElement = rootElement;
-            this.FileFunctions = new IndexFileFunctions();
+            this.formatChecker = formatChecker;
+            this.versionChecker = versionChecker;
         }
 
-        public XmlKeywordSearchIndexRepository(string rootElement, IIndexFileFunctions indexFileFunctions)
+        protected virtual bool IndexExists(string filePath)
         {
-            this.RootElement = rootElement;
-            this.FileFunctions = indexFileFunctions;
+            return File.Exists(filePath);
         }
 
-        public IIndex OpenIndex(string filePath, Version expectedVersion)
+        public IIndex OpenIndex(string filePath, string expectedVersion)
         {
-            if (!FileFunctions.Exists(filePath))
+            if (!IndexExists(filePath))
                 throw new FileNotFoundException("Index file not found.");
 
-            string fileText = FileFunctions.Open(filePath);
+            string fileText = "";
 
             CheckFormat(fileText);
             CheckVersion(fileText, expectedVersion);
@@ -42,19 +43,19 @@ namespace CygSoft.Sanae.Index
 
         protected virtual void CheckFormat(string fileText)
         {
-            if (!FileFunctions.CheckFormat(fileText))
+            if (!formatChecker(fileText))
                 throw new InvalidDataException("The file format for the target file does not match the format expected or the file is corrupt.");
         }
 
-        protected void CheckVersion(string fileText, Version expectedVersion)
+        protected void CheckVersion(string fileText, string expectedVersion)
         {
-            if (!FileFunctions.CheckVersion(fileText, expectedVersion))
+            if (!versionChecker(fileText, expectedVersion))
                 throw new InvalidFileIndexVersionException("The file version is not compatible with the current application version.");
         }
 
         public void SaveIndex(IIndex Index)
         {
-            XDocument xmlDocument = XDocument.Load(Index.FilePath, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+            XDocument xmlDocument = XDocument.Parse(LoadFile(Index.FilePath));
             XElement xElement = xmlDocument.Element(this.RootElement);
 
             xElement.Nodes().Remove();
@@ -64,31 +65,62 @@ namespace CygSoft.Sanae.Index
                 xElement.Add(item.Serialize());
             }
 
-            FileFunctions.Save(xmlDocument.ToString(), Index.FilePath);
+            SaveFile(xmlDocument.ToString(), Index.FilePath);
         }
+
+        protected virtual string LoadFile(string filePath)
+        {
+            string fileText = null;
+
+            if (IndexExists(filePath))
+            {
+                using (var file = new FileStream(filePath, FileMode.Open))
+                using (var reader = new StreamReader(file))
+                {
+                    fileText = reader.ReadToEnd();
+                }
+            }
+
+            return fileText;
+        }
+
+        protected virtual void SaveFile(string fileText, string filePath)
+        {
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write))
+            using (StreamWriter streamWriter = new StreamWriter(fileStream))
+            {
+                streamWriter.Write(fileText);
+                streamWriter.Flush();
+            }
+        }
+
+        //protected virtual XDocument LoadIndexDocument(IIndex Index)
+        //{
+        //    return XDocument.Load(Index.FilePath, LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+        //}
 
         public IIndex SaveIndexAs(IIndex Index, string filePath)
         {
             IIndex newIndex = CloneIndex(Index, filePath);
-            CreateIndex(filePath, Index.CurrentVersion);
+            CreateIndex(filePath, Index.CurrentVersion.ToString());
             SaveIndex(newIndex);
             return newIndex;
         }
 
         public IIndex CloneIndex(IIndex sourceIndex, string filePath)
         {
-            IIndex newIndex = new Index(filePath, sourceIndex.CurrentVersion, sourceIndex.All().ToList());
+            IIndex newIndex = new Index(filePath, sourceIndex.CurrentVersion.ToString(), sourceIndex.All().ToList());
             return newIndex;
         }
 
-        public IIndex CreateIndex(string filePath, Version expectedVersion)
+        public IIndex CreateIndex(string filePath, string expectedVersion)
         {
             CreateNew(filePath, expectedVersion);
             IIndex Index = new Index(filePath, expectedVersion);
             return Index;
         }
 
-        private void CreateNew(string xmlFile, Version expectedVersion)
+        private void CreateNew(string xmlFile, string expectedVersion)
         {
             XmlDocument xmlDocument = new XmlDocument();
 
@@ -103,13 +135,13 @@ namespace CygSoft.Sanae.Index
             xmlDocument.Save(xmlFile);
         }
 
-        protected abstract List<IndexItem> LoadIndexItems(string fileText, Version expectedVersion);
+        protected abstract List<IndexItem> LoadIndexItems(string fileText, string expectedVersion);
         
-        public void ImportItems(string filePath, Version expectedVersion, IIndexItem[] importItems)
+        public void ImportItems(string filePath, string expectedVersion, IIndexItem[] importItems)
         {
             IndexItem[] imports = importItems.OfType<IndexItem>().ToArray();
             XDocument xDocument = XDocument.Load(filePath);
-            string fileText = FileFunctions.Open(filePath);
+            string fileText = ""; // FileFunctions.Open(filePath);
 
             CheckVersion(fileText, expectedVersion);
 

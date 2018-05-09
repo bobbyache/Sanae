@@ -14,13 +14,13 @@ namespace CygSoft.Sanae.Index
         {
         }
 
-        public XmlIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
-            : base(id, title, dateCreated, dateModified, commaDelimitedKeywords)
+        public XmlIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+            : base(id, title, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
         {
         }
 
-        public XmlIndexItem(string title, string syntax, string commaDelimitedKeywords)
-            : base(title, commaDelimitedKeywords)
+        public XmlIndexItem(string title, string syntax, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+            : base(title, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
         {
         }
 

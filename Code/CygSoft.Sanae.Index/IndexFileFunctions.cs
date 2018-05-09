@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace CygSoft.Sanae.Index
 {
 
-    public class IndexFileFunctions : IIndexFileFunctions
+    public class IndexFileFunctions
     {
         public bool CheckVersion(string fileText, Version expectedVersion)
         {
@@ -54,7 +54,7 @@ namespace CygSoft.Sanae.Index
                 }
             }
 
-            return fileText; ;
+            return fileText;
         }
 
         public void Save(string fileText, string filePath)

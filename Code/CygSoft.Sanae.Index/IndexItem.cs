@@ -37,7 +37,7 @@ namespace CygSoft.Sanae.Index
             this.DateModified = this.DateCreated;
         }
 
-        public IndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
+        public IndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
         {
             this.DateCreated = dateCreated;
             this.DateModified = dateModified;
@@ -46,7 +46,7 @@ namespace CygSoft.Sanae.Index
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
         }
 
-        public IndexItem(string title, string commaDelimitedKeywords)
+        public IndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
             : base()
         {
             this.title = title;

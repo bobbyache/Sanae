@@ -8,12 +8,12 @@ namespace CygSoft.Sanae.Index.Infrastructure
 {
     public interface IIndexRepository
     {
-        IIndex OpenIndex(string filePath, Version expectedVersion);
+        IIndex OpenIndex(string filePath, string expectedVersion);
         void SaveIndex(IIndex Index);
         IIndex SaveIndexAs(IIndex Index, string filePath);
         IIndex CloneIndex(IIndex sourceIndex, string filePath);
-        IIndex CreateIndex(string filePath, Version expectedVersion);
+        IIndex CreateIndex(string filePath, string expectedVersion);
 
-        void ImportItems(string filePath, Version expectedVersion, IIndexItem[] items);
+        void ImportItems(string filePath, string expectedVersion, IIndexItem[] items);
     }
 }

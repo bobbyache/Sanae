@@ -69,6 +69,7 @@
       <Link>_CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Helpers\TestKeywordIndexItem.cs" />
+    <Compile Include="Helpers\TxtFile.cs" />
     <Compile Include="KeyPhrasesTests.cs" />
     <Compile Include="KeywordIndexItemTests.cs" />
     <Compile Include="KeywordSearchIndexTests.cs" />
@@ -90,6 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Files\LoadSingleIndexItem.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

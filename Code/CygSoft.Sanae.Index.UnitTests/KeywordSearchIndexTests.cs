@@ -24,9 +24,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_Create()
         {
-            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", new Version(2,0));
+            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", "2.0.0.0");
 
-            Assert.AreEqual(searchIndex.CurrentVersion.ToString(), new Version(2, 0).ToString());
+            Assert.AreEqual(searchIndex.CurrentVersion.ToString(), "2.0.0.0");
             Assert.AreEqual(searchIndex.FilePath, @"C:\keywords\keyword_index.xml");
             Assert.AreEqual(searchIndex.FileTitle, "keyword_index.xml");
         }
@@ -34,7 +34,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void KeywordSearchIndex_AddKeywords_SetsDateModified()
         {
-            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", new Version(2, 0));
+            IIndex searchIndex = new Index(@"C:\keywords\keyword_index.xml", "2.0.0.0");
             var keywordSearchIndexItem = new TestKeywordIndexItem();
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
@@ -44,7 +44,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_WhenAddingKeywordsToIndexItems_ReturnsTrueOnSubsequentSearchForOneOfThoseKeywords()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            IIndex searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            IIndex searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
             IIndexItem[] items = searchIndex.Find("TEST");
 
@@ -56,7 +56,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterRemovingKeywordsFromIndexItems_ReturnsFalseOnSubsequentSearchForThoseKeywords()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            var searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            var searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
             searchIndex.RemoveKeywords(new IIndexItem[] { keywordSearchIndexItem }, new string[] { "test", "testing", "tested" });
@@ -70,7 +70,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterAddingKeywordIndeces_ContainsIndeces()
         {
             var keywordSearchIndexItem = new TestKeywordIndexItem();
-            var searchIndex = new Index("", new Version(2, 0), new List<IIndexItem> { keywordSearchIndexItem });
+            var searchIndex = new Index("", "2.0.0.0", new List<IIndexItem> { keywordSearchIndexItem });
             searchIndex.AddKeywords(new IIndexItem[] { keywordSearchIndexItem }, @"test,testing,tested");
 
             Assert.That(searchIndex.Contains(keywordSearchIndexItem), Is.True);
@@ -81,12 +81,12 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterAddingItems_AllReturnsIndexItemCount()
         {
             List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
-                new TestKeywordIndexItem("Title 1", "test,testing,tested"),
-                new TestKeywordIndexItem("Title 2", "red,black"),
-                new TestKeywordIndexItem("Title 3", "apple,pear")
+                new TestKeywordIndexItem("Title 1", "test,testing,tested", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Title 2", "red,black", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Title 3", "apple,pear", new string[0], "Awe34Dr", "1.0.0.0")
             }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new Index("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", "2.0.0.0", indexItems);
 
             int numItemsInIndex = searchIndex.All().Length;
 
@@ -97,12 +97,12 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_AfterAddingItems_AllKeywordsReturnsUniqueKeywords()
         {
             List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
-                new TestKeywordIndexItem("Title 1", "test,testing,tested"),
-                new TestKeywordIndexItem("Title 2", "test,testing"),
-                new TestKeywordIndexItem("Title 3", "TESTING,TESTED")
+                new TestKeywordIndexItem("Title 1", "test,testing,tested", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Title 2", "test,testing", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Title 3", "TESTING,TESTED", new string[0], "Awe34Dr", "1.0.0.0")
             }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new Index("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", "2.0.0.0", indexItems);
 
             string[] allKeywords = searchIndex.AllKeywords(searchIndex.All());
 
@@ -113,12 +113,12 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void KeywordSearchIndex_FindById_ReturnsCorrectItems()
         {
             List<IIndexItem> indexItems = (new List<TestKeywordIndexItem> {
-                new TestKeywordIndexItem("2e77c1b2-7155-42ae-b542-e4e582318ff7", "Title 1", DateTime.Now, DateTime.Now, "one,test,testing,tested"),
-                new TestKeywordIndexItem("a995db89-5c04-422e-a9ac-9306e148a51d", "Title 2", DateTime.Now, DateTime.Now, "two,test,testing,tested"),
-                new TestKeywordIndexItem("d38db764-b52a-434b-b880-79df7c640ae3", "Title 3", DateTime.Now, DateTime.Now, "three,test,testing,tested")
+                new TestKeywordIndexItem("2e77c1b2-7155-42ae-b542-e4e582318ff7", "Title 1", DateTime.Now, DateTime.Now, "one,test,testing,tested", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("a995db89-5c04-422e-a9ac-9306e148a51d", "Title 2", DateTime.Now, DateTime.Now, "two,test,testing,tested", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("d38db764-b52a-434b-b880-79df7c640ae3", "Title 3", DateTime.Now, DateTime.Now, "three,test,testing,tested", new string[0], "Awe34Dr", "1.0.0.0")
             }).OfType<IIndexItem>().ToList();
 
-            var searchIndex = new Index("", new Version(2, 0), indexItems);
+            var searchIndex = new Index("", "2.0.0.0", indexItems);
 
             IIndexItem[] items = searchIndex.FindByIds(new string[] { "2e77c1b2-7155-42ae-b542-e4e582318ff7", "d38db764-b52a-434b-b880-79df7c640ae3" });
 

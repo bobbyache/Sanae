@@ -26,20 +26,20 @@ namespace CygSoft.Sanae.Index
 
         public string LibraryFolderPath { get; private set; }
 
-        internal Index(string filePath, Version currentVersion, List<IIndexItem> IndexItems)
+        internal Index(string filePath, string currentVersion, List<IIndexItem> IndexItems)
         {
             this.FilePath = filePath;
 
             this.FindAllForEmptySearch = true;
             this.IndexItems = IndexItems;
-            this.CurrentVersion = currentVersion;
+            this.CurrentVersion = new Version(currentVersion);
             CreateKeywordIndex();
         }
 
-        internal Index(string filePath, Version currentVersion)
+        internal Index(string filePath, string currentVersion)
         {
             this.FilePath = filePath;
-            this.CurrentVersion = currentVersion;
+            this.CurrentVersion = new Version(currentVersion);
             this.IndexItems = new List<IIndexItem>();
         }
 

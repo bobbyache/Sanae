@@ -13,7 +13,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_OnInitializedWithoutKeywords_ReturnsFalseForAllSearches()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
 
             bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "single" });
             bool emptyStringFound = keywordIndexItem.AllKeywordsFound(new string[] { "" });
@@ -25,7 +25,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_OnInitializedWithKeywords_ReturnsFalseIfNotFound()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
 
             bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "testing" });
             bool emptyStringFound = keywordIndexItem.AllKeywordsFound(new string[] { "tester", "testing" });
@@ -37,7 +37,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_OnInitializedWithKeywords_ReturnsTrueIfFound()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
 
             bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "test" });
             bool foundAll = keywordIndexItem.AllKeywordsFound(new string[] { "test", "tested" });
@@ -49,7 +49,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_OnInitializedWithKeywords_ReturnsFalseIfSomeFound()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
             bool found = keywordIndexItem.AllKeywordsFound(new string[] { "test", "testing" });
             Assert.That(found, Is.False);
         }
@@ -57,7 +57,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_AllKeywordsFound_ReturnsTrueIfExistRegardlessOfCase()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
             bool found = keywordIndexItem.AllKeywordsFound(new string[] { "TEST", "tested" });
             Assert.That(found, Is.True);
         }
@@ -66,7 +66,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void IndexItem_AddKeywordsAndSubsequentSearch_ReturnsTrueIfExistRegardlessOfCase()
         {
             
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.AddKeywords("banana,orange");
             bool found = keywordIndexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
             Assert.That(found, Is.True);
@@ -76,7 +76,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void IndexItem_RemoveKeywordsAndSubsequentSearch_ReturnsFalseIfSomeDoNotExist()
         {
 
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.RemoveKeywords(new string[] { "banana", "orange" });
             bool found = keywordIndexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
 
@@ -87,7 +87,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void IndexItem_SetKeywords_ResetsKeywords()
         {
 
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.SetKeywords("banana,orange");
             bool found = keywordIndexItem.AllKeywordsFound(new string[] { "BANANA", "Orange"});
             bool pearNotFound = keywordIndexItem.AllKeywordsFound(new string[] { "pear" });
@@ -104,7 +104,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.SetKeywords("banana,orange");
             bool willResultNonSearchhableIndexItem = !keywordIndexItem.ValidateRemoveKeywords(new string[] { "banana", "orange" });
 
@@ -116,7 +116,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.SetKeywords("banana,orange");
             bool willResultNonSearchhableIndexItem = !keywordIndexItem.ValidateRemoveKeywords(new string[] { "banana" });
             Assert.IsFalse(willResultNonSearchhableIndexItem);
@@ -127,7 +127,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
             keywordIndexItem.AddKeywords("banana,orange");
             keywordIndexItem.AddKeywords("banana,ORANGE");
             keywordIndexItem.AddKeywords("apple,BANANA");
@@ -147,7 +147,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_InitializedWithParameteredConstructor_ReturnsPassInIdString()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Test Title", DateTime.Now, DateTime.Now, "test,testing");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Test Title", DateTime.Now, DateTime.Now, "test,testing", new string[0], "Awe34Dr", "1.0.0.0");
             string id = keywordIndexItem.Id;
             Assert.That(id, Is.EqualTo("4ecac722-8ec5-441c-8e3e-00b192b30453"));
         }
@@ -155,7 +155,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_InitializedWithParameteredConstructorNoId_ReturnsNewIdString()
         {
-            IIndexItem keywordIndexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            IIndexItem keywordIndexItem = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
             Guid guid = new Guid(keywordIndexItem.Id);
             Assert.That(guid == Guid.Empty, Is.False);
         }
@@ -163,7 +163,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_AddCategoryPaths_AddsPaths_Successfully()
         {
-            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
             indexItem.AddCategoryPath("Project/Module/WorkItem1");
             indexItem.AddCategoryPath("Project/Module/WorkItem2");
 
@@ -173,7 +173,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_AddDuplicateCategoryPath_DoesNotDuplicate()
         {
-            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
             indexItem.AddCategoryPath("Project/Module/WorkItem");
             indexItem.AddCategoryPath("Project/Module/WorkItem");
 
@@ -183,7 +183,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_RemoveCategoryPath_RemovesCategoryPath_Successfully()
         {
-            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
             indexItem.AddCategoryPath("Project/Module/WorkItem1");
             indexItem.AddCategoryPath("Project/Module/WorkItem2");
 
@@ -196,7 +196,7 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void IndexItem_RemoveNonExistentCategoryPath_DoesNothingWithNoException()
         {
-            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing");
+            IIndexItem indexItem = new TestKeywordIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
             indexItem.AddCategoryPath("Project/Module/WorkItem1");
             indexItem.AddCategoryPath("Project/Module/WorkItem2");
             indexItem.RemoveCategoryPath("Project/Module/WorkItem3");

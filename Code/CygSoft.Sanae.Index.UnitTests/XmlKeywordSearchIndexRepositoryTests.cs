@@ -18,38 +18,53 @@ namespace CygSoft.Sanae.Index.UnitTests
         // http://jamesnewkirk.typepad.com/posts/2008/06/replacing-expec.html
 
         [Test]
+        public void XmlIndexRepository_Save_SavesCorrectXml()
+        {
+            TestXmlIndexItem item = new TestXmlIndexItem(
+                "4ecac722-8ec5-441c-8e3e-00b192b30453",
+                "Components and Libraries",
+                "",
+                DateTime.Parse("2018/02/28 18:00:00"),
+                DateTime.Parse("2018/02/28 19:00:00"),
+                "TEST,TEST", 
+                new string[] { "2017/05", "SPC/Components/Enquiries/History" },
+                "Awe34Dr", 
+                "1.0.0.0"
+            );
+            //item.AddCategoryPath("2017/05");
+            //item.AddCategoryPath("SPC/Components/Enquiries/History");
+
+            Index index = new Index(TxtFile.ResolvePath("LoadSingleIndexItem.xml"), "4.1.0.0", new List<IIndexItem> { item });
+            TestXmlIndexRepository repository = new TestXmlIndexRepository("Index", (s1) => true, (s1, s2) => true);
+            repository.SaveIndex(index);
+            Assert.AreEqual(repository.LastSavedXml, TxtFile.ReadText("LoadSingleIndexItem.xml"), "Expected that saved xml matches the expected xml. Xml does not match.");
+        }
+
+        [Test]
         public void XmlIndexRepository_OpeningNonExistingFile_ThrowsFileNotFoundException()
         {
-            StubIndexFileFunctions stubFile = new StubIndexFileFunctions();
-            stubFile.IsExistingFile = false;
+            TestXmlIndexRepository repository = new TestXmlIndexRepository("RootElement", (s1) => true, (s1, s2) => true);
+            repository.FudgeIndexExists = false;
 
-            TestXmlKeywordSearchIndexRepository repository = new TestXmlKeywordSearchIndexRepository("RootElement", stubFile);
-
-            Assert.That(() => repository.OpenIndex("", new Version(2,0)), Throws.InstanceOf(typeof(FileNotFoundException)),
+            Assert.That(() => repository.OpenIndex("", "2.0.0.0"), Throws.InstanceOf(typeof(FileNotFoundException)),
                 "Stub method simulated that an Index file was not found at the path specified. Repository should have thrown a FileNotFoundException.");
         }
 
         [Test]
         public void XmlIndexRepository_OpeningIncorrectFormat_ThrowsArgumentException()
         {
-            StubIndexFileFunctions stubFile = new StubIndexFileFunctions();
-            stubFile.IsCorrectFormat = false;
+            TestXmlIndexRepository repository = new TestXmlIndexRepository("RootElement", (s1) => false, (s1, s2) => true);
 
-            TestXmlKeywordSearchIndexRepository repository = new TestXmlKeywordSearchIndexRepository("RootElement", stubFile);
-
-            Assert.That(() => repository.OpenIndex("", new Version(2, 0)), Throws.InstanceOf(typeof(InvalidDataException)),
+            Assert.That(() => repository.OpenIndex("", "2.0.0.0"), Throws.InstanceOf(typeof(InvalidDataException)),
                 "Stub method simulated that an Index file format was invalid but a InvalidDataException was not thrown.");
         }
 
         [Test]
         public void XmlIndexRepository_OpeningIncorrectVersion_ThrowsVersionException()
         {
-            StubIndexFileFunctions stubFile = new StubIndexFileFunctions();
-            stubFile.IsCorrectVersion = false;
+            TestXmlIndexRepository repository = new TestXmlIndexRepository("RootElement", (s1) => true, (s1, s2) => false);
 
-            TestXmlKeywordSearchIndexRepository repository = new TestXmlKeywordSearchIndexRepository("RootElement", stubFile);
-
-            Assert.That(() => repository.OpenIndex("", new Version(2, 0)), Throws.InstanceOf(typeof(InvalidFileIndexVersionException)));
+            Assert.That(() => repository.OpenIndex("", "2.0.0.0"), Throws.InstanceOf(typeof(InvalidFileIndexVersionException)));
         }
 
         [Test]
@@ -57,18 +72,18 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             var indexItems = new IIndexItem[]
             {
-                new TestKeywordIndexItem("Item 1", "green,blue"),
-                new TestKeywordIndexItem("Item 1", "green,red"),
-                new TestKeywordIndexItem("Item 1", "yellow,gray")
+                new TestKeywordIndexItem("Item 1", "green,blue", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Item 1", "green,red", new string[0], "Awe34Dr", "1.0.0.0"),
+                new TestKeywordIndexItem("Item 1", "yellow,gray", new string[0], "Awe34Dr", "1.0.0.0")
             };
 
             var stubKeywordSearchIndex = new Mock<IIndex>();
             stubKeywordSearchIndex.Setup(m => m.All()).Returns(indexItems);
             stubKeywordSearchIndex.Setup(m => m.CurrentVersion).Returns(new Version(2, 0));
 
-            var keywordSearchIndex = new Index("C:File.xml", new Version(2, 0));
+            var keywordSearchIndex = new Index("C:File.xml", "2.0.0.0");
  
-            TestXmlKeywordSearchIndexRepository repository = new TestXmlKeywordSearchIndexRepository("RootElement", new StubIndexFileFunctions());
+            TestXmlIndexRepository repository = new TestXmlIndexRepository("RootElement", (s1) => true, (s1, s2) => true);
             IIndex newSearchIndex = repository.CloneIndex(stubKeywordSearchIndex.Object, @"C:\hello_world.txt");
 
             Assert.That(newSearchIndex, Is.Not.SameAs(stubKeywordSearchIndex.Object));
@@ -78,60 +93,51 @@ namespace CygSoft.Sanae.Index.UnitTests
             Assert.That(newSearchIndex.Contains(indexItems[2]), Is.True);
         }
 
-        class StubIndexFileFunctions : IIndexFileFunctions
+        class TestXmlIndexRepository : XmlIndexRepository<TestXmlIndexItem>
         {
-            public bool IsCorrectFormat = true;
-            public bool IsCorrectVersion = true;
-            public bool IsExistingFile = true;
+            public bool FudgeIndexExists = true;
+            public string LastSavedXml = "";
 
-            public bool FileExists {  get { return IsExistingFile; } } 
-
-            public bool Exists(string filePath)
+            public TestXmlIndexRepository(string rootElement, Func<string, bool> formatChecker, Func<string, string, bool> versionChecker) 
+                : base(rootElement, formatChecker, versionChecker)
             {
-                return IsExistingFile;
-            }
-            public string Open(string filePath)
-            {
-                return string.Empty;
-            }
-            public void Save(string fileText, string filePath) { }
-
-            public bool CheckFormat(string fileText)
-            {
-                return IsCorrectFormat;
             }
 
-            public bool CheckVersion(string fileText, Version expectedVersion)
+            protected override List<TestXmlIndexItem> LoadIndexItems(string filePath, string currentVersion)
             {
-                return IsCorrectVersion;
+                return new List<TestXmlIndexItem>();
+            }
+
+            protected override bool IndexExists(string filePath)
+            {
+                return FudgeIndexExists ? true : false;
+            }
+
+            protected override void SaveFile(string fileText, string filePath)
+            {
+                LastSavedXml = fileText;
+            }
+
+            protected override string LoadFile(string filePath)
+            {
+                return TxtFile.ReadText("LoadSingleIndexItem.xml");
             }
         }
 
-        class TestXmlKeywordSearchIndexRepository : XmlKeywordSearchIndexRepository<TestXmlKeywordIndexItem>
+        class TestXmlIndexItem : XmlIndexItem
         {
-            public TestXmlKeywordSearchIndexRepository(string rootElement, StubIndexFileFunctions indexFileFunctions) : base(rootElement, indexFileFunctions)
+            public TestXmlIndexItem() : base()
             {
             }
 
-            protected override List<TestXmlKeywordIndexItem> LoadIndexItems(string filePath, Version currentVersion)
-            {
-                return new List<TestXmlKeywordIndexItem>();
-            }
-        }
-
-        class TestXmlKeywordIndexItem : XmlIndexItem
-        {
-            public TestXmlKeywordIndexItem() : base()
+            public TestXmlIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, 
+                string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+            : base(id, title, syntax, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
             {
             }
 
-            public TestXmlKeywordIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords)
-            : base(id, title, syntax, dateCreated, dateModified, commaDelimitedKeywords)
-            {
-            }
-
-            public TestXmlKeywordIndexItem(string title, string syntax, string commaDelimitedKeywords)
-            : base(title, syntax, commaDelimitedKeywords)
+            public TestXmlIndexItem(string title, string syntax, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+            : base(title, syntax, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
             {
             }
         }
