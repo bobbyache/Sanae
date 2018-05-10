@@ -1,5 +1,6 @@
 ﻿using CygSoft.Sanae.Index.Infrastructure;
 using System;
+using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
@@ -47,9 +48,15 @@ namespace CygSoft.Sanae.Index
             this.title = title;
         }
 
-        public string Serialize()
+        public XElement Serialize()
         {
-            throw new NotImplementedException();
+            XElement element = new XElement("IndexItem",
+                    new XAttribute("ID", Id),
+                    new XAttribute("DateCreated", DateCreated.ToString(Constants.TimeFormat)),
+                    new XAttribute("DateModified", DateModified.ToString(Constants.TimeFormat)),
+                    new XAttribute("Title", Title)
+                    );
+            return element;
         }
     }
 }

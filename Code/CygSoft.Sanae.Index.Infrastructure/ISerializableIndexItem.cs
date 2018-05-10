@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index.Infrastructure
 {
@@ -9,6 +10,6 @@ namespace CygSoft.Sanae.Index.Infrastructure
         string Id { get; }
         string Title { get; set; }
 
-        string Serialize();
+        XElement Serialize();
     }
 }

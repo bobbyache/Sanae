@@ -12,7 +12,7 @@ namespace CygSoft.Sanae.Index.UnitTests.Helpers
         {
             // Remove white space...
             var output = System.Text.RegularExpressions.Regex.Replace(sql, "[ \t\n\r\v\f]", "");
-            return output.ToLower();
+            return output; //.ToLower();
         }
     }
 }
