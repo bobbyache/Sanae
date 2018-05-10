@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Index Version="4.1.0.0" KeywordSearch="True" CategoryPaths="True">
+<Index Version="4.1.0.0">
   <IndexItem ID="4ecac722-8ec5-441c-8e3e-00b192b30453" DateCreated="2018/02/28 18:00:00" DateModified="2018/02/28 19:00:00" Title="Components and Libraries" >
     <Plugin ID="PLUGIN-001" Version="1.0.0.0" />
     <Keywords>COMPONENT,CREDITS,DLL,FRAMEWORK,GENERATE,GENERATOR,LIBRARY,REUSE,TOOL,TOOLS</Keywords>

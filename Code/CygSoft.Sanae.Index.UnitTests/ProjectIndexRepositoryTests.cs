@@ -33,10 +33,10 @@ namespace CygSoft.Sanae.Index.UnitTests
             //item.AddCategoryPath("2017/05");
             //item.AddCategoryPath("SPC/Components/Enquiries/History");
 
-            Index index = new Index(TxtFile.ResolvePath("LoadSingleIndexItem.xml"), "4.1.0.0", new List<IProjectIndexItem> { item });
+            Index index = new Index(TxtFile.ResolvePath("LoadSingleProjectIndexItem.xml"), "4.1.0.0", new List<IProjectIndexItem> { item });
             TestXmlProjectIndexRepository repository = new TestXmlProjectIndexRepository("Index", (s1) => true, (s1, s2) => true);
             repository.SaveIndex(index);
-            Assert.AreEqual(repository.LastSavedXml, TxtFile.ReadText("LoadSingleIndexItem.xml"), "Expected that saved xml matches the expected xml. Xml does not match.");
+            Assert.AreEqual(repository.LastSavedXml, TxtFile.ReadText("LoadSingleProjectIndexItem.xml"), "Expected that saved xml matches the expected xml. Xml does not match.");
         }
 
         [Test]

@@ -45,6 +45,7 @@
     <Compile Include="IProjectIndexItem.cs" />
     <Compile Include="IIndex.cs" />
     <Compile Include="IIndexRepository.cs" />
+    <Compile Include="ISerializableIndexItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
