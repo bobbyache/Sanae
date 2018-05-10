@@ -23,7 +23,6 @@ namespace CygSoft.Sanae.Index.UnitTests
             TestXmlIndexItem item = new TestXmlIndexItem(
                 "4ecac722-8ec5-441c-8e3e-00b192b30453",
                 "Components and Libraries",
-                "",
                 DateTime.Parse("2018/02/28 18:00:00"),
                 DateTime.Parse("2018/02/28 19:00:00"),
                 "TEST,TEST", 
@@ -126,18 +125,18 @@ namespace CygSoft.Sanae.Index.UnitTests
 
         class TestXmlIndexItem : XmlIndexItem
         {
-            public TestXmlIndexItem() : base("Title", "", "", new string[0], "", "")
+            public TestXmlIndexItem() : base("Title", "", new string[0], "", "")
             {
             }
 
-            public TestXmlIndexItem(string id, string title, string syntax, DateTime dateCreated, DateTime dateModified, 
+            public TestXmlIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, 
                 string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
-            : base(id, title, syntax, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
+            : base(id, title, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
             {
             }
 
-            public TestXmlIndexItem(string title, string syntax, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
-            : base(title, syntax, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
+            public TestXmlIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+            : base(title, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
             {
             }
         }
