@@ -12,7 +12,7 @@ namespace CygSoft.Sanae.Index.UnitTests
     [TestFixture]
     [Category("Tests.UnitTests")]
     [Category("KeywordIndex"), Category("KeywordIndex.XmlKeywordSearchIndexRepository")]
-    class XmlProjectIndexRepositoryTests
+    class ProjectIndexRepositoryTests
     {
         // Replacing the ExpectedExceptionAttribute with Throws.InstanceOf
         // http://jamesnewkirk.typepad.com/posts/2008/06/replacing-expec.html

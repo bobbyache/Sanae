@@ -75,7 +75,7 @@
     <Compile Include="ProjectIndexItemTests.cs" />
     <Compile Include="ProjectIndexTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlProjectIndexRepositoryTests.cs" />
+    <Compile Include="ProjectIndexRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
