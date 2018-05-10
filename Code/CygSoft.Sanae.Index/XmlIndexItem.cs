@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
-    public abstract class XmlIndexItem : IndexItem
+    public abstract class XmlIndexItem : ProjectIndexItem
     {
         public XmlIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
             : base(id, title, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)

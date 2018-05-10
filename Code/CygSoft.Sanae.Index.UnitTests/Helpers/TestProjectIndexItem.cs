@@ -9,15 +9,15 @@ namespace CygSoft.Sanae.Index.UnitTests.Helpers
     /// <summary>
     /// Required for testing. KeywordIndexItem is abstract.
     /// </summary>
-    public class TestKeywordIndexItem : IndexItem
+    public class TestProjectIndexItem : ProjectIndexItem
     {
-        public TestKeywordIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion) : 
+        public TestProjectIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion) : 
             base(title, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
         {
 
         }
 
-        public TestKeywordIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion) : 
+        public TestProjectIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion) : 
             base(id, title, dateCreated, dateModified, commaDelimitedKeywords, categoryPaths, pluginId, pluginVersion)
         {
 

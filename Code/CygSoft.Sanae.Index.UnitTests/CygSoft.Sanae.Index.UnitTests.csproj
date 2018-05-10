@@ -69,13 +69,13 @@
       <Link>_CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Helpers\Functions.cs" />
-    <Compile Include="Helpers\TestKeywordIndexItem.cs" />
+    <Compile Include="Helpers\TestProjectIndexItem.cs" />
     <Compile Include="Helpers\TxtFile.cs" />
     <Compile Include="KeyPhrasesTests.cs" />
-    <Compile Include="KeywordIndexItemTests.cs" />
-    <Compile Include="KeywordSearchIndexTests.cs" />
+    <Compile Include="ProjectIndexItemTests.cs" />
+    <Compile Include="ProjectIndexTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlKeywordSearchIndexRepositoryTests.cs" />
+    <Compile Include="XmlProjectIndexRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

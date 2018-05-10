@@ -17,7 +17,7 @@ namespace CygSoft.Sanae.Index
         /// </summary>
         public event EventHandler IndexModified;
 
-        private List<IIndexItem> IndexItems;
+        private List<IProjectIndexItem> IndexItems;
         private KeyPhrases keyPhrases = new KeyPhrases();
 
         public bool FindAllForEmptySearch { get; set; }
@@ -26,7 +26,7 @@ namespace CygSoft.Sanae.Index
 
         public string LibraryFolderPath { get; private set; }
 
-        internal Index(string filePath, string currentVersion, List<IIndexItem> IndexItems)
+        internal Index(string filePath, string currentVersion, List<IProjectIndexItem> IndexItems)
         {
             this.FilePath = filePath;
 
@@ -40,10 +40,10 @@ namespace CygSoft.Sanae.Index
         {
             this.FilePath = filePath;
             this.CurrentVersion = new Version(currentVersion);
-            this.IndexItems = new List<IIndexItem>();
+            this.IndexItems = new List<IProjectIndexItem>();
         }
 
-        public IIndexItem[] All()
+        public IProjectIndexItem[] All()
         {
             return IndexItems.ToArray();
         }
@@ -54,7 +54,7 @@ namespace CygSoft.Sanae.Index
 
         public string[] Keywords { get { return this.keyPhrases.Phrases; } }
 
-        public IIndexItem[] FindByIds(string[] ids)
+        public IProjectIndexItem[] FindByIds(string[] ids)
         {
             var result = from ix in IndexItems
                          join ia in ids on ix.Id equals ia
@@ -63,23 +63,23 @@ namespace CygSoft.Sanae.Index
             return result.ToArray();
         }
 
-        public IIndexItem FindById(string id)
+        public IProjectIndexItem FindById(string id)
         {
             if (this.IndexItems.Any(r => r.Id == id))
                 return this.IndexItems.Where(r => r.Id == id).SingleOrDefault();
             return null;
         }
 
-        public IIndexItem[] Find(string commaDelimitedKeywords)
+        public IProjectIndexItem[] Find(string commaDelimitedKeywords)
         {
-            List<IIndexItem> foundItemList = new List<IIndexItem>();
+            List<IProjectIndexItem> foundItemList = new List<IProjectIndexItem>();
 
             if (!string.IsNullOrWhiteSpace(commaDelimitedKeywords))
             {
 
                 KeyPhrases keys = new KeyPhrases(commaDelimitedKeywords);
 
-                foreach (IIndexItem item in IndexItems)
+                foreach (IProjectIndexItem item in IndexItems)
                 {
                     if (item.AllKeywordsFound(keys.Phrases))
                         foundItemList.Add(item);
@@ -97,7 +97,7 @@ namespace CygSoft.Sanae.Index
 
         public int ItemCount { get { return this.IndexItems.Count; } }
 
-        public bool Contains(IIndexItem item)
+        public bool Contains(IProjectIndexItem item)
         {
             return this.IndexItems.Any(r => r.Id == item.Id);
         }
@@ -111,7 +111,7 @@ namespace CygSoft.Sanae.Index
         /// A single item has been  changed. This will be used when a code index items is added.
         /// </summary>
         /// <param name="item"></param>
-        public void Update(IIndexItem item)
+        public void Update(IProjectIndexItem item)
         {
             if (!Contains(item))
                 Add(item);
@@ -121,49 +121,49 @@ namespace CygSoft.Sanae.Index
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public string[] AllKeywords(IIndexItem[] indeces)
+        public string[] AllKeywords(IProjectIndexItem[] indeces)
         {
             KeyPhrases phrases = new KeyPhrases();
-            foreach (IIndexItem index in indeces)
+            foreach (IProjectIndexItem index in indeces)
             {
                 phrases.AddKeyPhrases(index.Keywords);
             }
             return phrases.Phrases;
         }
 
-        public string CopyAllKeywords(IIndexItem[] indeces)
+        public string CopyAllKeywords(IProjectIndexItem[] indeces)
         {
             KeyPhrases phrases = new KeyPhrases();
-            foreach (IIndexItem index in indeces)
+            foreach (IProjectIndexItem index in indeces)
             {
                 phrases.AddKeyPhrases(index.Keywords);
             }
             return phrases.DelimitKeyPhraseList();
         }
 
-        public void AddKeywords(IIndexItem[] indeces, string delimitedKeywordList)
+        public void AddKeywords(IProjectIndexItem[] indeces, string delimitedKeywordList)
         {
-            foreach (IIndexItem index in indeces)
+            foreach (IProjectIndexItem index in indeces)
             {
                 index.AddKeywords(delimitedKeywordList);
             }
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public void RemoveKeywords(IIndexItem[] indeces, string[] keywords)
+        public void RemoveKeywords(IProjectIndexItem[] indeces, string[] keywords)
         {
             // the rule is that a searchable item cannot have an empty keyword list!
 
-            foreach (IIndexItem index in indeces)
+            foreach (IProjectIndexItem index in indeces)
             {
                 index.RemoveKeywords(keywords);
             }
             IndexModified?.Invoke(this, new EventArgs());
         }
 
-        public bool IndexesExistFor(IIndexItem[] indeces, out IIndexItem[] existingIndeces)
+        public bool IndexesExistFor(IProjectIndexItem[] indeces, out IProjectIndexItem[] existingIndeces)
         {
-            IEnumerable<IIndexItem> foundItems = indeces.Join(this.IndexItems, a => a.Id, b => b.Id, 
+            IEnumerable<IProjectIndexItem> foundItems = indeces.Join(this.IndexItems, a => a.Id, b => b.Id, 
                 (a, b) => b);
 
             existingIndeces = foundItems.ToArray();
@@ -171,12 +171,12 @@ namespace CygSoft.Sanae.Index
             return existingIndeces.Count() > 0;
         }
 
-        public bool ValidateRemoveKeywords(IIndexItem[] indeces, string[] keywords, out IIndexItem[] invalidIndeces)
+        public bool ValidateRemoveKeywords(IProjectIndexItem[] indeces, string[] keywords, out IProjectIndexItem[] invalidIndeces)
         {
             bool valid = true;
 
-            List<IIndexItem> invalidItems = new List<IIndexItem>();
-            foreach (IIndexItem index in indeces)
+            List<IProjectIndexItem> invalidItems = new List<IProjectIndexItem>();
+            foreach (IProjectIndexItem index in indeces)
             {
                 bool validated = index.ValidateRemoveKeywords(keywords);
                 if (!validated)
@@ -190,7 +190,7 @@ namespace CygSoft.Sanae.Index
             return valid;
         }
 
-        private void Add(IIndexItem item)
+        private void Add(IProjectIndexItem item)
         {
             if (Contains(item))
                 throw new ApplicationException("This id already exists within the index. Cannot add a duplicate id to the index.");
@@ -202,7 +202,7 @@ namespace CygSoft.Sanae.Index
 
         public void Remove(string id)
         {
-            IIndexItem item = this.IndexItems.Where(cd => cd.Id == id).SingleOrDefault();
+            IProjectIndexItem item = this.IndexItems.Where(cd => cd.Id == id).SingleOrDefault();
             this.IndexItems.Remove(item);
             CreateKeywordIndex();
 
@@ -212,7 +212,7 @@ namespace CygSoft.Sanae.Index
         private void CreateKeywordIndex()
         {
             keyPhrases = new KeyPhrases();
-            foreach (IIndexItem IndexItem in IndexItems)
+            foreach (IProjectIndexItem IndexItem in IndexItems)
             {
                 keyPhrases.AddKeyPhrases(IndexItem.Keywords);
             }

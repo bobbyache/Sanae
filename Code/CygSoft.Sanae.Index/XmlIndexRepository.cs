@@ -37,7 +37,7 @@ namespace CygSoft.Sanae.Index
             CheckVersion(fileText, expectedVersion);
 
             List<IndexItem> items = LoadIndexItems(fileText, expectedVersion);
-            IIndex Index = new Index(filePath, expectedVersion, items.Cast<IIndexItem>().ToList());
+            IIndex Index = new Index(filePath, expectedVersion, items.Cast<IProjectIndexItem>().ToList());
             return Index;
         }
 
@@ -137,7 +137,7 @@ namespace CygSoft.Sanae.Index
 
         protected abstract List<IndexItem> LoadIndexItems(string fileText, string expectedVersion);
         
-        public void ImportItems(string filePath, string expectedVersion, IIndexItem[] importItems)
+        public void ImportItems(string filePath, string expectedVersion, IProjectIndexItem[] importItems)
         {
             IndexItem[] imports = importItems.OfType<IndexItem>().ToArray();
             XDocument xDocument = XDocument.Load(filePath);

@@ -2,7 +2,7 @@
 
 namespace CygSoft.Sanae.Index.Infrastructure
 {
-    public interface IIndexItem
+    public interface IProjectIndexItem
     {
         string Id { get; }
         string Title { get; set; }

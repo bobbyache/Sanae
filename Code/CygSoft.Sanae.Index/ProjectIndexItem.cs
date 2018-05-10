@@ -7,7 +7,7 @@ namespace CygSoft.Sanae.Index
     /// <summary>
     /// A single code index item that points to a single code snippet resource.
     /// </summary>
-    public abstract class IndexItem : IIndexItem
+    public abstract class ProjectIndexItem : IProjectIndexItem
     {
         private Guid identifyingGuid;
 
@@ -28,16 +28,7 @@ namespace CygSoft.Sanae.Index
             }
         }
 
-        //public IndexItem()
-        //{
-        //    this.title = string.Empty;
-        //    this.KeywordsFromDelimitedList(string.Empty);
-        //    this.identifyingGuid = Guid.Empty;
-        //    this.DateCreated = DateTime.Now;
-        //    this.DateModified = this.DateCreated;
-        //}
-
-        public IndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+        public ProjectIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
         {
             this.DateCreated = dateCreated;
             this.DateModified = dateModified;
@@ -48,7 +39,7 @@ namespace CygSoft.Sanae.Index
             this.PluginVersion = pluginVersion;
         }
 
-        public IndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
+        public ProjectIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
             : base()
         {
             this.title = title;

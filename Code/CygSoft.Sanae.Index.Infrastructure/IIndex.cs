@@ -8,28 +8,28 @@ namespace CygSoft.Sanae.Index.Infrastructure
 {
     public interface IIndex
     {
-        void AddKeywords(IIndexItem[] indeces, string delimitedKeywordList);
-        IIndexItem[] All();
-        string[] AllKeywords(IIndexItem[] indeces);
-        bool Contains(IIndexItem item);
+        void AddKeywords(IProjectIndexItem[] indeces, string delimitedKeywordList);
+        IProjectIndexItem[] All();
+        string[] AllKeywords(IProjectIndexItem[] indeces);
+        bool Contains(IProjectIndexItem item);
         bool Contains(string id);
-        string CopyAllKeywords(IIndexItem[] indeces);
+        string CopyAllKeywords(IProjectIndexItem[] indeces);
         Version CurrentVersion { get; }
         string FilePath { get; }
         string FileTitle { get; }
-        IIndexItem[] Find(string commaDelimitedKeywords);
+        IProjectIndexItem[] Find(string commaDelimitedKeywords);
         bool FindAllForEmptySearch { get; set; }
-        IIndexItem FindById(string id);
-        IIndexItem[] FindByIds(string[] ids);
+        IProjectIndexItem FindById(string id);
+        IProjectIndexItem[] FindByIds(string[] ids);
         string FolderPath { get; }
         event EventHandler IndexModified;
         int ItemCount { get; }
         string[] Keywords { get; }
         string LibraryFolderPath { get; }
         void Remove(string id);
-        bool IndexesExistFor(IIndexItem[] indeces, out IIndexItem[] existingIndeces);
-        bool ValidateRemoveKeywords(IIndexItem[] indeces, string[] keywords, out IIndexItem[] invalidEmptyItems);
-        void RemoveKeywords(IIndexItem[] indeces, string[] keywords);
-        void Update(IIndexItem item);
+        bool IndexesExistFor(IProjectIndexItem[] indeces, out IProjectIndexItem[] existingIndeces);
+        bool ValidateRemoveKeywords(IProjectIndexItem[] indeces, string[] keywords, out IProjectIndexItem[] invalidEmptyItems);
+        void RemoveKeywords(IProjectIndexItem[] indeces, string[] keywords);
+        void Update(IProjectIndexItem item);
     }
 }

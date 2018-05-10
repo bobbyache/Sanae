@@ -14,6 +14,6 @@ namespace CygSoft.Sanae.Index.Infrastructure
         IIndex CloneIndex(IIndex sourceIndex, string filePath);
         IIndex CreateIndex(string filePath, string expectedVersion);
 
-        void ImportItems(string filePath, string expectedVersion, IIndexItem[] items);
+        void ImportItems(string filePath, string expectedVersion, IProjectIndexItem[] items);
     }
 }
