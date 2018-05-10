@@ -1,48 +1,26 @@
 ﻿using CygSoft.Sanae.Index.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
 {
     /// <summary>
     /// A single code index item that points to a single code snippet resource.
     /// </summary>
-    public abstract class ProjectIndexItem : IProjectIndexItem
+    public abstract class ProjectIndexItem : SerializableIndexItem, IProjectIndexItem
     {
-        private Guid identifyingGuid;
-
-        public DateTime DateModified { get; set; }
-        public DateTime DateCreated { get; set; }
-
-        public string Id
+        public ProjectIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, 
+            string[] categoryPaths, string pluginId, string pluginVersion) : base(id, title, dateCreated, dateModified)
         {
-            get
-            {
-                if (identifyingGuid == Guid.Empty)
-                    identifyingGuid = Guid.NewGuid();
-                return identifyingGuid.ToString();
-            }
-            protected set
-            {
-                identifyingGuid = new Guid(value);
-            }
-        }
-
-        public ProjectIndexItem(string id, string title, DateTime dateCreated, DateTime dateModified, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
-        {
-            this.DateCreated = dateCreated;
-            this.DateModified = dateModified;
-            this.identifyingGuid = new Guid(id);
-            this.title = title;
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
             this.PluginId = pluginId;
             this.PluginVersion = pluginVersion;
         }
 
         public ProjectIndexItem(string title, string commaDelimitedKeywords, string[] categoryPaths, string pluginId, string pluginVersion)
-            : base()
+            : base(title)
         {
-            this.title = title;
             this.KeywordsFromDelimitedList(commaDelimitedKeywords);
             this.PluginId = pluginId;
             this.PluginVersion = pluginVersion;
@@ -64,13 +42,6 @@ namespace CygSoft.Sanae.Index
         public string CommaDelimitedKeywords
         {
             get { return this.keyPhrases.DelimitKeyPhraseList(); }
-        }
-
-        private string title;
-        public string Title
-        {
-            get { return title; }
-            set { title = value; this.DateModified = DateTime.Now; }
         }
 
         public string[] CategoryPaths => categoryPaths.ToArray();
@@ -122,6 +93,11 @@ namespace CygSoft.Sanae.Index
         public void RemoveCategoryPath(string path)
         {
             categoryPaths.Remove(path);
+        }
+
+        public override XElement Serialize()
+        {
+            return base.Serialize();
         }
     }
 }

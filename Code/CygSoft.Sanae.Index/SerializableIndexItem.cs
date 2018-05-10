@@ -48,7 +48,7 @@ namespace CygSoft.Sanae.Index
             this.title = title;
         }
 
-        public XElement Serialize()
+        public virtual XElement Serialize()
         {
             XElement element = new XElement("IndexItem",
                     new XAttribute("ID", Id),
