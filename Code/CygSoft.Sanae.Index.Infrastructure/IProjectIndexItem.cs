@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index.Infrastructure
 {
@@ -25,6 +26,7 @@ namespace CygSoft.Sanae.Index.Infrastructure
         bool ValidateRemoveKeywords(string[] keywords);
         void RemoveKeywords(string[] keywords);
         void SetKeywords(string commaDelimitedKeywords);
-        
+
+        XElement Serialize();
     }
 }

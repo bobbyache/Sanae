@@ -1,6 +1,7 @@
 ﻿using CygSoft.Sanae.Index.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace CygSoft.Sanae.Index
@@ -97,7 +98,23 @@ namespace CygSoft.Sanae.Index
 
         public override XElement Serialize()
         {
-            return base.Serialize();
+            XElement element = base.Serialize();
+
+            XElement pathsElement = new XElement("Paths",
+                CategoryPaths.Select(p => new XElement("Path", p)
+                ));
+
+            
+
+            element.Add(
+                new XElement("Plugin",
+                    new XAttribute("ID", PluginId),
+                    new XAttribute("Version", PluginVersion)
+                ),
+                new XElement("Keywords", CommaDelimitedKeywords),
+                pathsElement
+            );
+            return element;
         }
     }
 }

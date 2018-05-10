@@ -7,16 +7,35 @@ namespace CygSoft.Sanae.Index.UnitTests
 {
     [TestFixture]
     [Category("Tests.UnitTests")]
-    [Category("KeywordIndex"), Category("KeywordIndex.KeywordIndexItem")]
+    [Category("KeywordIndex"), Category("KeywordIndex.indexItem")]
     class ProjectIndexItemTests
     {
         [Test]
+        public void ProjectindexItem_Serialize_Matches_Expected_Format()
+        {
+            DateTime createDate = DateTime.Parse("2018/06/12 18:23:12");
+            DateTime modifiedDate = DateTime.Parse("2018/06/22 08:00:52");
+
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Components and Libraries", createDate, modifiedDate, 
+                "COMPONENT,CREDITS,DLL,FRAMEWORK,GENERATE,GENERATOR,LIBRARY,REUSE,TOOL,TOOLS", 
+                new string[0], "PLUGIN-001", "1.0.0.0");
+
+            indexItem.AddCategoryPath("2017/05");
+            indexItem.AddCategoryPath("SPC/Components/Enquiries/History");
+
+            string serializedXml = Functions.ComparableXml(indexItem.Serialize().ToString());
+            string expectedXml = Functions.ComparableXml(TxtFile.ReadText("ProjectIndexItemXML.txt"));
+
+            Assert.That(expectedXml, Is.EqualTo(serializedXml));
+        }
+
+        [Test]
         public void ProjectIndexItem_OnInitializedWithoutKeywords_ReturnsFalseForAllSearches()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
 
-            bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "single" });
-            bool emptyStringFound = keywordIndexItem.AllKeywordsFound(new string[] { "" });
+            bool foundSingle = indexItem.AllKeywordsFound(new string[] { "single" });
+            bool emptyStringFound = indexItem.AllKeywordsFound(new string[] { "" });
 
             Assert.That(foundSingle, Is.False);
             Assert.That(emptyStringFound, Is.False);
@@ -25,10 +44,10 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void ProjectIndexItem_OnInitializedWithKeywords_ReturnsFalseIfNotFound()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
 
-            bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "testing" });
-            bool emptyStringFound = keywordIndexItem.AllKeywordsFound(new string[] { "tester", "testing" });
+            bool foundSingle = indexItem.AllKeywordsFound(new string[] { "testing" });
+            bool emptyStringFound = indexItem.AllKeywordsFound(new string[] { "tester", "testing" });
 
             Assert.That(foundSingle, Is.False);
             Assert.That(emptyStringFound, Is.False);
@@ -37,10 +56,10 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void ProjectIndexItem_OnInitializedWithKeywords_ReturnsTrueIfFound()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
 
-            bool foundSingle = keywordIndexItem.AllKeywordsFound(new string[] { "test" });
-            bool foundAll = keywordIndexItem.AllKeywordsFound(new string[] { "test", "tested" });
+            bool foundSingle = indexItem.AllKeywordsFound(new string[] { "test" });
+            bool foundAll = indexItem.AllKeywordsFound(new string[] { "test", "tested" });
 
             Assert.That(foundSingle, Is.True);
             Assert.That(foundAll, Is.True);
@@ -49,16 +68,16 @@ namespace CygSoft.Sanae.Index.UnitTests
         [Test]
         public void ProjectIndexItem_OnInitializedWithKeywords_ReturnsFalseIfSomeFound()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
-            bool found = keywordIndexItem.AllKeywordsFound(new string[] { "test", "testing" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
+            bool found = indexItem.AllKeywordsFound(new string[] { "test", "testing" });
             Assert.That(found, Is.False);
         }
 
         [Test]
         public void ProjectIndexItem_AllKeywordsFound_ReturnsTrueIfExistRegardlessOfCase()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
-            bool found = keywordIndexItem.AllKeywordsFound(new string[] { "TEST", "tested" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "test,tested", new string[0], "Awe34Dr", "1.0.0.0");
+            bool found = indexItem.AllKeywordsFound(new string[] { "TEST", "tested" });
             Assert.That(found, Is.True);
         }
 
@@ -66,9 +85,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void ProjectIndexItem_AddKeywordsAndSubsequentSearch_ReturnsTrueIfExistRegardlessOfCase()
         {
             
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.AddKeywords("banana,orange");
-            bool found = keywordIndexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.AddKeywords("banana,orange");
+            bool found = indexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
             Assert.That(found, Is.True);
         }
 
@@ -76,9 +95,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void ProjectIndexItem_RemoveKeywordsAndSubsequentSearch_ReturnsFalseIfSomeDoNotExist()
         {
 
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.RemoveKeywords(new string[] { "banana", "orange" });
-            bool found = keywordIndexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.RemoveKeywords(new string[] { "banana", "orange" });
+            bool found = indexItem.AllKeywordsFound(new string[] { "apple", "BANANA", "Orange", "pear" });
 
             Assert.That(found, Is.False);
         }
@@ -87,11 +106,11 @@ namespace CygSoft.Sanae.Index.UnitTests
         public void ProjectIndexItem_SetKeywords_ResetsKeywords()
         {
 
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.SetKeywords("banana,orange");
-            bool found = keywordIndexItem.AllKeywordsFound(new string[] { "BANANA", "Orange"});
-            bool pearNotFound = keywordIndexItem.AllKeywordsFound(new string[] { "pear" });
-            bool appleNotFound = keywordIndexItem.AllKeywordsFound(new string[] { "apple" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "apple,pear,banana,orange", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.SetKeywords("banana,orange");
+            bool found = indexItem.AllKeywordsFound(new string[] { "BANANA", "Orange"});
+            bool pearNotFound = indexItem.AllKeywordsFound(new string[] { "pear" });
+            bool appleNotFound = indexItem.AllKeywordsFound(new string[] { "apple" });
 
             Assert.That(found, Is.True);
             Assert.That(pearNotFound, Is.False);
@@ -104,9 +123,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.SetKeywords("banana,orange");
-            bool willResultNonSearchhableIndexItem = !keywordIndexItem.ValidateRemoveKeywords(new string[] { "banana", "orange" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.SetKeywords("banana,orange");
+            bool willResultNonSearchhableIndexItem = !indexItem.ValidateRemoveKeywords(new string[] { "banana", "orange" });
 
             Assert.IsTrue(willResultNonSearchhableIndexItem);
         }
@@ -116,9 +135,9 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.SetKeywords("banana,orange");
-            bool willResultNonSearchhableIndexItem = !keywordIndexItem.ValidateRemoveKeywords(new string[] { "banana" });
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.SetKeywords("banana,orange");
+            bool willResultNonSearchhableIndexItem = !indexItem.ValidateRemoveKeywords(new string[] { "banana" });
             Assert.IsFalse(willResultNonSearchhableIndexItem);
         }
 
@@ -127,36 +146,36 @@ namespace CygSoft.Sanae.Index.UnitTests
         {
             // better to change from ValidateRemoveKeywords() to IsSearchableAfterRemove()
             // perhaps add property "IsSearchable" or "HasKeywords" or both....
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
-            keywordIndexItem.AddKeywords("banana,orange");
-            keywordIndexItem.AddKeywords("banana,ORANGE");
-            keywordIndexItem.AddKeywords("apple,BANANA");
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Title", DateTime.Now, DateTime.Now, "", new string[0], "Awe34Dr", "1.0.0.0");
+            indexItem.AddKeywords("banana,orange");
+            indexItem.AddKeywords("banana,ORANGE");
+            indexItem.AddKeywords("apple,BANANA");
 
-            int keywordCount = keywordIndexItem.Keywords.Length;
+            int keywordCount = indexItem.Keywords.Length;
             Assert.That(keywordCount, Is.EqualTo(3));
         }
 
         [Test]
         public void ProjectIndexItem_InitializedWithParameterlessConstructor_ReturnsNewIdString()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("Title", "", new string[0], "", "");
-            Guid guid = new Guid(keywordIndexItem.Id);
+            IProjectIndexItem indexItem = new TestProjectIndexItem("Title", "", new string[0], "", "");
+            Guid guid = new Guid(indexItem.Id);
             Assert.That(guid == Guid.Empty, Is.False);
         }
 
         [Test]
         public void ProjectIndexItem_InitializedWithParameteredConstructor_ReturnsPassInIdString()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Test Title", DateTime.Now, DateTime.Now, "test,testing", new string[0], "Awe34Dr", "1.0.0.0");
-            string id = keywordIndexItem.Id;
+            IProjectIndexItem indexItem = new TestProjectIndexItem("4ecac722-8ec5-441c-8e3e-00b192b30453", "Test Title", DateTime.Now, DateTime.Now, "test,testing", new string[0], "Awe34Dr", "1.0.0.0");
+            string id = indexItem.Id;
             Assert.That(id, Is.EqualTo("4ecac722-8ec5-441c-8e3e-00b192b30453"));
         }
 
         [Test]
         public void ProjectIndexItem_InitializedWithParameteredConstructorNoId_ReturnsNewIdString()
         {
-            IProjectIndexItem keywordIndexItem = new TestProjectIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
-            Guid guid = new Guid(keywordIndexItem.Id);
+            IProjectIndexItem indexItem = new TestProjectIndexItem("Test Title", "test, testing", new string[0], "Awe34Dr", "1.0.0.0");
+            Guid guid = new Guid(indexItem.Id);
             Assert.That(guid == Guid.Empty, Is.False);
         }
 

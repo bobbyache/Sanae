@@ -1,0 +1,8 @@
+﻿  <IndexItem ID="4ecac722-8ec5-441c-8e3e-00b192b30453" DateCreated="2018/06/12 18:23:12" DateModified="2018/06/22 08:00:52" Title="Components and Libraries" >
+    <Plugin ID="PLUGIN-001" Version="1.0.0.0" />
+    <Keywords>COMPONENT,CREDITS,DLL,FRAMEWORK,GENERATE,GENERATOR,LIBRARY,REUSE,TOOL,TOOLS</Keywords>
+    <Paths>
+      <Path>2017/05</Path>
+      <Path>SPC/Components/Enquiries/History</Path>
+    </Paths>
+  </IndexItem>

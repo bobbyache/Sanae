@@ -98,6 +98,9 @@
     <Content Include="Files\LoadSingleProjectIndexItem.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\ProjectIndexItemXML.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\SerializableIndexItemXML.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
