@@ -101,6 +101,9 @@
     <Content Include="Files\ProjectIndexItemXML.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\SaveProjectIndex.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\SerializableIndexItemXML.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
